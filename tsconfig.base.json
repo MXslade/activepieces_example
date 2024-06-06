@@ -125,6 +125,9 @@
         "packages/pieces/community/crypto/src/index.ts"
       ],
       "@activepieces/piece-csv": ["packages/pieces/community/csv/src/index.ts"],
+      "@activepieces/piece-darleen-entities": [
+        "packages/pieces/community/darleen-entities/src/index.ts"
+      ],
       "@activepieces/piece-data-mapper": [
         "packages/pieces/community/data-mapper/src/index.ts"
       ],
@@ -555,6 +558,9 @@
       ],
       "@activepieces/piece-wedof": [
         "packages/pieces/community/wedof/src/index.ts"
+      ],
+      "@activepieces/piece-whatever": [
+        "packages/pieces/community/whatever/src/index.ts"
       ],
       "@activepieces/piece-whatsable": [
         "packages/pieces/community/whatsable/src/index.ts"

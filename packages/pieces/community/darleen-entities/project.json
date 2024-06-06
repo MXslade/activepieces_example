@@ -1,0 +1,38 @@
+{
+  "name": "pieces-darleen-entities",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/pieces/community/darleen-entities/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": [
+        "{options.outputPath}"
+      ],
+      "options": {
+        "outputPath": "dist/packages/pieces/community/darleen-entities",
+        "tsConfig": "packages/pieces/community/darleen-entities/tsconfig.lib.json",
+        "packageJson": "packages/pieces/community/darleen-entities/package.json",
+        "main": "packages/pieces/community/darleen-entities/src/index.ts",
+        "assets": [
+          "packages/pieces/community/darleen-entities/*.md"
+        ],
+        "buildableProjectDepsInPackageJsonType": "dependencies",
+        "updateBuildableProjectDepsInPackageJson": true
+      }
+    },
+    "publish": {
+      "command": "node tools/scripts/publish.mjs pieces-darleen-entities {args.ver} {args.tag}",
+      "dependsOn": [
+        "build"
+      ]
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": [
+        "{options.outputFile}"
+      ]
+    }
+  },
+  "tags": []
+}
