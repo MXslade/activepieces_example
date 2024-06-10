@@ -1,5 +1,12 @@
 import { jwtUtils } from '../../helper/jwt-utils'
-import { ActivepiecesError, assertNotNullOrUndefined, ErrorCode, Principal } from '@activepieces/shared'
+import { logger } from '@activepieces/server-shared'
+import {
+  ActivepiecesError,
+  assertNotNullOrUndefined,
+  ErrorCode,
+  Principal,
+  PrincipalType,
+} from '@activepieces/shared';
 
 export const accessTokenManager = {
     async generateToken(principal: Principal): Promise<string> {
@@ -12,13 +19,21 @@ export const accessTokenManager = {
     },
 
     async extractPrincipal(token: string): Promise<Principal> {
-        const secret = await jwtUtils.getJwtSecret()
+        const secret = `-----BEGIN PUBLIC KEY-----
+${await jwtUtils.getJwtSecret()}
+-----END PUBLIC KEY-----`
+        logger.info('token: ')
+        logger.info(token)
+        logger.info(`secret plya: ${secret}`)
 
         try {
             const decoded = await jwtUtils.decodeAndVerify<Principal>({
                 jwt: token,
                 key: secret,
             })
+            logger.info('decoded principal: ')
+            logger.info(decoded)
+            decoded.type = PrincipalType.USER
             assertNotNullOrUndefined(decoded.type, 'decoded.type')
             return decoded
         }

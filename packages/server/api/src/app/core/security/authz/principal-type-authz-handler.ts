@@ -1,5 +1,6 @@
 import { FastifyRequest } from 'fastify'
 import { BaseSecurityHandler } from '../security-handler'
+import { logger } from '@activepieces/server-shared'
 import {
     ActivepiecesError,
     ErrorCode,
@@ -24,15 +25,22 @@ export class PrincipalTypeAuthzHandler extends BaseSecurityHandler {
       !PrincipalTypeAuthzHandler.IGNORED_ROUTES.includes(request.routerPath) &&
       !request.routerPath.startsWith('/ui')
 
+        logger.info('principle type authz request matches: ', (requestMatches ? 'matches' : 'not matches'))
+        logger.flush()
+
         return Promise.resolve(requestMatches)
     }
 
     protected doHandle(request: FastifyRequest): Promise<void> {
         const principalType = request.principal.type
+        logger.info('principle type authz handler: ')
+        logger.info(principalType)
         const configuredPrincipals = request.routeConfig.allowedPrincipals
         const defaultPrincipals =
       PrincipalTypeAuthzHandler.DEFAULT_ALLOWED_PRINCIPAL_TYPES
         const allowedPrincipals = configuredPrincipals ?? defaultPrincipals
+        logger.info('allowed principals: ')
+        logger.info(allowedPrincipals)
         const principalTypeNotAllowed = !allowedPrincipals.includes(principalType)
 
         if (principalTypeNotAllowed) {

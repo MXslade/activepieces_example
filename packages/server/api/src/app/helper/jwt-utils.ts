@@ -6,7 +6,12 @@ import jwtLibrary, {
     VerifyOptions,
 } from 'jsonwebtoken'
 import { localFileStore } from './store'
-import { QueueMode, system, SystemProp } from '@activepieces/server-shared'
+import {
+  logger,
+  QueueMode,
+  system,
+  SystemProp,
+} from '@activepieces/server-shared';
 import {
     ActivepiecesError,
     ErrorCode,
@@ -22,7 +27,7 @@ export enum JwtSignAlgorithm {
 const ONE_WEEK = 7 * 24 * 3600
 const KEY_ID = '1'
 const ISSUER = 'activepieces'
-const ALGORITHM = JwtSignAlgorithm.HS256
+const ALGORITHM = JwtSignAlgorithm.RS256
 
 let secret: string | null = null
 const queueMode = system.getOrThrow<QueueMode>(SystemProp.QUEUE_MODE)
@@ -106,17 +111,28 @@ export const jwtUtils = {
         jwt,
         key,
         algorithm = ALGORITHM,
-        issuer = ISSUER,
-        audience,
+        //issuer = '',
+        //audience,
     }: VerifyParams): Promise<T> {
         const verifyOptions: VerifyOptions = {
             algorithms: [algorithm],
-            ...spreadIfDefined('issuer', issuer),
-            ...spreadIfDefined('audience', audience),
+            //...spreadIfDefined('issuer', issuer),
+            //...spreadIfDefined('audience', audience),
         }
+
+        logger.info('verifyOptions: ')
+        logger.info(verifyOptions)
 
         return new Promise((resolve, reject) => {
             jwtLibrary.verify(jwt, key, verifyOptions, (err, payload) => {
+                logger.info('jwt: ')
+                logger.info(jwt)
+                logger.info('key: ')
+                logger.info(key)
+                logger.info('verifyOptions: ')
+                logger.info(verifyOptions)
+                logger.info('payload: ')
+                logger.info(payload)
                 if (err) {
                     return reject(err)
                 }

@@ -6,13 +6,14 @@ import { GlobalApiKeyAuthnHandler } from './authn/global-api-key-authn-handler'
 import { PlatformApiKeyAuthnHandler } from './authn/platform-api-key-authn-handler'
 import { PrincipalTypeAuthzHandler } from './authz/principal-type-authz-handler'
 import { ProjectAuthzHandler } from './authz/project-authz-handler'
+import { logger } from '@activepieces/server-shared'
 import { Principal } from '@activepieces/shared'
 
 const AUTHN_HANDLERS = [
+    new AccessTokenAuthnHandler(),
     new AppSumoAuthnHandler(),
     new GlobalApiKeyAuthnHandler(),
     new PlatformApiKeyAuthnHandler(),
-    new AccessTokenAuthnHandler(),
     new AnonymousAuthnHandler(),
 ]
 
@@ -50,5 +51,8 @@ const executeAuthzHandlers = async (request: FastifyRequest): Promise<void> => {
 
 const checkWhetherPrincipalIsPopulated = (request: FastifyRequest): boolean => {
     const principal = request.principal as Principal | undefined
+    logger.info('checkWhetherPrincipalIsPopulated: ', principal)
+    logger.info(principal === undefined ? 'kek' : 'not kek')
+    logger.info(principal)
     return principal !== undefined
 }
